@@ -11,5 +11,4 @@ export class FrontNavbarComponent {
 
   authService = inject(AuthService);
 
-  
- }
+}
