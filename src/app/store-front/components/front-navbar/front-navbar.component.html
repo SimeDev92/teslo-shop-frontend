@@ -1,75 +1,153 @@
-<div class="navbar bg-base-100 shadow-sm">
+<div class="navbar bg-base-100 shadow-md border-b border-base-300">
   <div class="navbar-start">
+    <!-- Mobile Menu -->
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
         </svg>
       </div>
-      <ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+      <ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow-lg border border-base-300">
         <li>
-          <a routerLink="/gender/men" class="btn-btn-ghost" routerLinkActive="text-secondary">Hombres</a>
+          <a routerLink="/gender/men" routerLinkActive="active" class="hover:bg-secondary hover:text-secondary-content">
+            Hombres
+          </a>
         </li>
         <li>
-          <a routerLink="/gender/women" class="btn-btn-ghost" routerLinkActive="text-secondary">Mujeres</a>
+          <a routerLink="/gender/women" routerLinkActive="active" class="hover:bg-secondary hover:text-secondary-content">
+            Mujeres
+          </a>
         </li>
         <li>
-          <a routerLink="/gender/kid" class="btn-btn-ghost" routerLinkActive="text-secondary">Niños</a>
+          <a routerLink="/gender/kid" routerLinkActive="active" class="hover:bg-secondary hover:text-secondary-content">
+            Niños
+          </a>
+        </li>
+        <div class="divider my-1"></div>
+        <li>
+          <a routerLink="/mi-compra" routerLinkActive="active" class="hover:bg-secondary hover:text-secondary-content">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2zm11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2z" />
+            </svg>
+            Mi Compra
+            @if(cartService.totalItems() > 0) {
+              <span class="badge badge-secondary badge-sm">{{ cartService.totalItems() }}</span>
+            }
+          </a>
         </li>
       </ul>
     </div>
-    <a
-      routerLink="/" class="btn btn-ghost text-xl font-montserrat">
-      Teslo
-      <span class="text-secondary">| Shop</span>
 
+    <!-- Logo -->
+    <a routerLink="/" class="btn btn-ghost text-xl font-montserrat hover:bg-transparent group">
+      <span class="group-hover:text-secondary transition-colors">Teslo</span>
+      <span class="text-secondary">| Shop</span>
     </a>
   </div>
+
+  <!-- Desktop Menu -->
   <div class="navbar-center hidden lg:flex">
-    <ul class="menu menu-horizontal px-1">
-    <li>
-          <a routerLink="/gender/men" class="btn-btn-ghost" routerLinkActive="text-secondary">Hombres</a>
-        </li>
-        <li>
-          <a routerLink="/gender/women" class="btn-btn-ghost" routerLinkActive="text-secondary">Mujeres</a>
-        </li>
-        <li>
-          <a routerLink="/gender/kid" class="btn-btn-ghost" routerLinkActive="text-secondary">Niños</a>
-        </li>
+    <ul class="menu menu-horizontal px-1 gap-1">
+      <li>
+        <a
+          routerLink="/gender/men"
+          routerLinkActive="active"
+          class="hover:bg-secondary hover:text-secondary-content rounded-lg transition-all">
+          Hombres
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/gender/women"
+          routerLinkActive="active"
+          class="hover:bg-secondary hover:text-secondary-content rounded-lg transition-all">
+          Mujeres
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/gender/kid"
+          routerLinkActive="active"
+          class="hover:bg-secondary hover:text-secondary-content rounded-lg transition-all">
+          Niños
+        </a>
+      </li>
     </ul>
   </div>
-  <div class="navbar-end gap-4">
 
-    @if( authService.isAdmin()){
+  <!-- Right Side -->
+  <div class="navbar-end gap-2">
 
-      <a routerLink="/admin" class="btn text-accent">Admin Panel</a>
+    <!-- Cart Button (Desktop & Mobile) -->
+    <a
+      routerLink="/mi-compra"
+      class="btn btn-ghost btn-circle relative hover:bg-secondary hover:text-secondary-content transition-all group"
+      [class.animate-pulse]="cartService.totalItems() > 0">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="group-hover:scale-110 transition-transform">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2zm11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2z" />
+      </svg>
+
+      <!-- Badge Counter -->
+      @if(cartService.totalItems() > 0) {
+        <span class="absolute -top-1 -right-1 badge badge-secondary badge-sm font-bold animate-bounce">
+          {{ cartService.totalItems() }}
+        </span>
+      }
+    </a>
+
+    <!-- Admin Panel -->
+    @if(authService.isAdmin()) {
+      <a
+        routerLink="/admin"
+        class="btn btn-sm btn-outline btn-accent hidden sm:flex">
+        Admin Panel
+      </a>
     }
 
-    @if( authService.authStatus() ===  'authenticated') {
-
-      <button class="btn btn-ghost">
-
-        {{ authService.user()?.fullName }}
-      </button>
-
-      <button class="btn btc-sm btn-error"
-      (click)="authService.logout()"
-      >
-        Salir
-      </button>
+    <!-- Auth Buttons -->
+    @if(authService.authStatus() === 'authenticated') {
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+          <span class="hidden sm:inline">{{ authService.user()?.fullName }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-lg border border-base-300 mt-4">
+          @if(authService.isAdmin()) {
+            <li class="sm:hidden">
+              <a routerLink="/admin">Admin Panel</a>
+            </li>
+            <div class="divider my-1 sm:hidden"></div>
+          }
+          <li>
+            <button (click)="authService.logout()" class="text-error hover:bg-error hover:text-error-content">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Cerrar Sesión
+            </button>
+          </li>
+        </ul>
+      </div>
     }
-    <!--  -->
-    @else if ( authService.authStatus() ===  'not-authenticated' ) {
-      <a routerLink="/auth/login"
-       class="btn btn-secondary"
-      >
+    @else if(authService.authStatus() === 'not-authenticated') {
+      <a
+        routerLink="/auth/login"
+        class="btn btn-secondary btn-sm">
         Login
       </a>
     }
-    <!--  -->
     @else {
-      <a class="btn btn-ghost">...</a>
+      <span class="loading loading-spinner loading-sm"></span>
     }
-
   </div>
 </div>

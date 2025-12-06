@@ -1,19 +1,93 @@
-<div class="card card-compact bg-base-100 shadow-xl animate-fadeIn">
-  <figure>
-    <img [src]="product().images | productImage" [alt]="product().title" />
+<div class="card bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-300 group overflow-hidden border border-base-200 hover:border-secondary">
+
+  <!-- Image Container with Overlay -->
+  <figure class="relative overflow-hidden aspect-square">
+    <img
+      [src]="product().images | productImage"
+      [alt]="product().title"
+      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+
+    <!-- Quick Actions Overlay -->
+    <div class="absolute inset-0 bg-linear-to-t from-base-300/90 via-base-300/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+      <div class="w-full flex gap-2">
+        <!-- View Product -->
+        <a
+          [routerLink]="['/product', product().slug]"
+          class="btn btn-sm btn-outline flex-1 backdrop-blur-sm hover:btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          Ver
+        </a>
+
+        <!-- Add to Cart -->
+        <button
+          (click)="addToCart()"
+          [disabled]="isInCart()"
+          class="btn btn-sm flex-1 backdrop-blur-sm"
+          [class.btn-secondary]="!isInCart()"
+          [class.btn-success]="isInCart()">
+          @if(!isInCart()) {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2zm11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2z" />
+            </svg>
+            Añadir
+          } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            En carrito
+          }
+        </button>
+      </div>
+    </div>
+
+    <!-- Stock Badge (opcional, si tienes stock) -->
+    <!-- <div class="absolute top-3 right-3 badge badge-accent badge-sm">Nuevo</div> -->
   </figure>
-  <div class="card-body">
+
+  <!-- Card Body -->
+  <div class="card-body p-4">
     <h2
-      class="card-title font-montserrat text-accent text-lg hover:underline cursor-pointer"
-      [routerLink]="['/product', product().slug]"
-    >
+      class="card-title text-base font-montserrat hover:text-secondary transition-colors cursor-pointer line-clamp-2"
+      [routerLink]="['/product', product().slug]">
       {{ product().title }}
     </h2>
-    <p>{{ product().description | slice : 0 : 70 }}...</p>
-    <div class="card-actions justify-end">
-      <a class="link link-accent" [routerLink]="['/product', product().slug]">
-        Ver producto
+
+    <p class="text-sm text-base-content/70 line-clamp-2">
+      {{ product().description }}
+    </p>
+
+    <!-- Tags (si tienes categorías) -->
+    @if(product().tags && product().tags.length > 0) {
+      <div class="flex flex-wrap gap-1 mt-2">
+        @for(tag of product().tags.slice(0, 3); track tag) {
+          <span class="badge badge-outline badge-xs">{{ tag }}</span>
+        }
+      </div>
+    }
+
+    <!-- Footer Actions (mobile fallback) -->
+    <div class="card-actions justify-between items-center mt-3 sm:hidden">
+      <a
+        [routerLink]="['/product', product().slug]"
+        class="link link-secondary text-sm">
+        Ver detalles →
       </a>
+      <button
+        (click)="addToCart()"
+        [disabled]="isInCart()"
+        class="btn btn-xs"
+        [class.btn-secondary]="!isInCart()"
+        [class.btn-success]="isInCart()">
+        @if(!isInCart()) {
+          Añadir
+        } @else {
+          ✓ En carrito
+        }
+      </button>
     </div>
   </div>
 </div>

@@ -4,7 +4,8 @@ import { environment } from 'src/environments/environment';
 const baseUrl = environment.baseUrl;
 
 @Pipe({
-  name: 'productImage'
+  name: 'productImage',
+   standalone: true
 })
 
 export class ProductImagePipe implements PipeTransform {

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
+import { CartService } from '@shared/components/cart/cart.service';
 
 @Component({
   selector: 'front-navbar',
@@ -10,5 +11,6 @@ import { AuthService } from '@auth/services/auth.service';
 export class FrontNavbarComponent {
 
   authService = inject(AuthService);
+  cartService = inject(CartService);
 
 }

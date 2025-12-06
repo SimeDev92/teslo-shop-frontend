@@ -4,6 +4,7 @@ import { HomePageComponent } from "./pages/home-page/home-page.component";
 import { GenderPageComponent } from "./pages/gender-page/gender-page.component";
 import { ProductPageComponent } from "./pages/product-page/product-page.component";
 import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.component";
+import { CartPageComponent } from "./pages/cart-page/cart-page.component";
 
 
 export const storeFrontRoutes:Routes = [
@@ -24,6 +25,10 @@ export const storeFrontRoutes:Routes = [
       {
         path: 'product/:idSlug',
         component: ProductPageComponent
+      },
+      {
+        path: 'mi-compra', // Nueva ruta del carrito
+        component: CartPageComponent
       },
 
     ],

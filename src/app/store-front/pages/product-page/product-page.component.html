@@ -1,21 +1,227 @@
+<!-- Loading State -->
 @if (productResource.isLoading()) {
-  <div class="flex justify-center items-center h-screen">
-    <span class="loading loading-spinner loading-lg"></span>
+  <div class="flex flex-col justify-center items-center min-h-[60vh] gap-4">
+    <span class="loading loading-spinner loading-lg text-secondary"></span>
+    <p class="text-base-content/60">Cargando producto...</p>
   </div>
 }
 
-@if (productResource.hasValue() ) {
+<!-- Product Content -->
+@if (productResource.value() && !productResource.isLoading()) {
+  <div class="animate-fadeIn">
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <!-- images -->
-    <product-carousel [images]="productResource.value().images" />
-    <div>
-      <h2 class="text-2xl font-bold font-montserrat">
-        {{productResource.value().title }}
-      </h2>
-      <div class="divider"></div>
-      <p>{{productResource.value().description }}</p>
+    <!-- Breadcrumb -->
+    <div class="text-sm breadcrumbs mb-6">
+      <ul>
+        <li><a routerLink="/" class="link link-hover">Inicio</a></li>
+        <li><a [routerLink]="['/gender', productResource.value()!.gender]" class="link link-hover capitalize">
+          {{ productResource.value()!.gender }}
+        </a></li>
+        <li class="text-base-content/60">{{ productResource.value()!.title }}</li>
+      </ul>
+    </div>
+
+    <!-- Main Product Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+
+      <!-- Left Column: Images -->
+      <div class="space-y-4">
+        <!-- Main Carousel -->
+        <div class="rounded-2xl overflow-hidden border border-base-300 shadow-xl bg-base-200">
+          <product-carousel [images]="productResource.value()!.images" />
+        </div>
+
+        <!-- Thumbnail Preview (opcional, si quieres) -->
+        @if(productResource.value()!.images.length > 1) {
+          <div class="grid grid-cols-4 gap-2">
+            @for(image of productResource.value()!.images.slice(0, 4); track $index) {
+              <div class="aspect-square rounded-lg overflow-hidden border-2 border-base-300 hover:border-secondary cursor-pointer transition-all">
+                <img
+                  [src]="image | productImage"
+                  [alt]="productResource.value()!.title"
+                  class="w-full h-full object-cover" />
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Right Column: Product Info -->
+      <div class="space-y-6">
+
+        <!-- Title & Category -->
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="badge badge-secondary badge-lg capitalize">
+              {{ productResource.value()!.gender }}
+            </span>
+            @if(productResource.value()!.tags && productResource.value()!.tags.length > 0) {
+              <span class="badge badge-outline">
+                {{ productResource.value()!.tags[0] }}
+              </span>
+            }
+          </div>
+          <h1 class="text-4xl font-bold font-montserrat mb-2">
+            {{ productResource.value()!.title }}
+          </h1>
+          <p class="text-base-content/60">
+            SKU: {{ productResource.value()!.slug.toUpperCase() }}
+          </p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Description -->
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Descripción</h3>
+          <p class="text-base-content/80 leading-relaxed">
+            {{ productResource.value()!.description }}
+          </p>
+        </div>
+
+        <!-- Tags -->
+        @if(productResource.value()!.tags && productResource.value()!.tags.length > 0) {
+          <div>
+            <h3 class="font-semibold text-sm mb-2">Etiquetas</h3>
+            <div class="flex flex-wrap gap-2">
+              @for(tag of productResource.value()!.tags; track tag) {
+                <span class="badge badge-ghost">{{ tag }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="divider"></div>
+
+        <!-- Quantity Selector -->
+        <div>
+          <h3 class="font-semibold text-sm mb-3">Cantidad</h3>
+          <div class="join">
+            <button
+              class="btn btn-sm join-item"
+              (click)="decrementQuantity()"
+              [disabled]="quantity() <= 1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+              </svg>
+            </button>
+            <input
+              type="number"
+              [value]="quantity()"
+              (input)="onQuantityChange($event)"
+              min="1"
+              max="99"
+              class="input input-sm join-item w-20 text-center font-semibold" />
+            <button
+              class="btn btn-sm join-item"
+              (click)="incrementQuantity()"
+              [disabled]="quantity() >= 99">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Add to Cart Actions -->
+        <div class="space-y-3">
+          @if(!isInCart()) {
+            <button
+              (click)="addToCart()"
+              class="btn btn-secondary btn-lg w-full shadow-lg hover:shadow-xl transition-all group">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2zm11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2z" />
+              </svg>
+              Añadir al carrito
+            </button>
+          } @else {
+            <div class="space-y-2">
+              <div class="alert alert-success shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Producto en el carrito ({{ currentCartQuantity() }} unidades)</span>
+              </div>
+
+              <div class="flex gap-2">
+                <button
+                  (click)="updateCartQuantity()"
+                  class="btn btn-outline btn-secondary flex-1">
+                  Actualizar cantidad
+                </button>
+                <a
+                  routerLink="/mi-compra"
+                  class="btn btn-secondary flex-1">
+                  Ir al carrito
+                </a>
+              </div>
+            </div>
+          }
+
+          <!-- Continue Shopping -->
+          <a
+            routerLink="/"
+            class="btn btn-ghost btn-block">
+            ← Continuar comprando
+          </a>
+        </div>
+
+        <!-- Product Features (opcional) -->
+        <div class="card bg-base-200 shadow-sm">
+          <div class="card-body p-4">
+            <h3 class="font-semibold text-sm mb-3">Información del producto</h3>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Envío gratis en compras superiores a 50€</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Devoluciones gratis hasta 30 días</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Garantía de calidad Teslo</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Related Products Section (opcional para después) -->
+    <!-- <div class="mt-16">
+      <h2 class="text-2xl font-bold mb-6">Productos relacionados</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        // Related products grid
+      </div>
+    </div> -->
+
+  </div>
+}
+
+<!-- Error State -->
+@if (productResource.error()) {
+  <div class="flex flex-col justify-center items-center min-h-[60vh] gap-4">
+    <div class="text-error">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <div class="text-center">
+      <h2 class="text-2xl font-bold mb-2">Producto no encontrado</h2>
+      <p class="text-base-content/60 mb-4">El producto que buscas no existe o ha sido eliminado.</p>
+      <a routerLink="/" class="btn btn-secondary">
+        Volver al inicio
+      </a>
     </div>
   </div>
-
 }

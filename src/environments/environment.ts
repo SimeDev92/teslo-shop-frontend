@@ -1,6 +1,6 @@
 export const environment = {
 
 
-  baseUrl: 'https://nest-teslo-shop-mt01.onrender.com/api',
+  baseUrl: 'https://teslo-api-175787855194.europe-west1.run.app/api',
 
 };
