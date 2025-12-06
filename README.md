@@ -1,59 +1,206 @@
-# TesloShop
+🛍️ TesloShop — E-Commerce UI + API
+Adaptación personalizada del proyecto del curso de Angular de Fernando Herrera
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.7.
+TesloShop es una tienda online completamente funcional construida con Angular 17, NestJS, PostgreSQL y Cloud Run (Google Cloud).
+Esta versión ha sido rediseñada y extendida para ser un e-commerce moderno, elegante, modular y totalmente reutilizable para cualquier tipo de negocio.
 
-## Development server
+Incluye:
 
-To start a local development server, run:
+🧩 Custom UI completa (Tailwind + DaisyUI + animaciones)
 
-```bash
+🛒 Carrito de compras 100% funcional (Reactive Signals)
+
+🔐 Autenticación JWT
+
+📦 Módulo de productos CRUD
+
+🖼️ Gestión de imágenes estáticas desde el backend
+
+🚀 Deploy en Cloud Run + Angular en producción
+
+🧪 Arquitectura limpia y modular
+
+
+Características principales
+🎨 Diseño personalizado
+
+La interfaz fue reconstruida adaptándolo a mi manera:
+
+Diseño limpio y minimalista
+
+Animaciones sutiles con transform y transiciones
+
+Hover effects con escalado dinámico
+
+Sistema de tarjetas responsivo
+
+Layout orientado a conversión (UX comercial)
+
+🛒 Carrito de compras con Signals
+
+Carrito de compras implementado usando el nuevo sistema de Angular Signals:
+
+Añadir productos
+
+Persistencia local
+
+Botón dinámico “Añadir / En carrito”
+
+Integración lista para conectar Stripe, PayPal o cualquier pasarela
+
+🔐 Sistema de autenticación completo
+
+Backend listo para producción con:
+
+JWT
+
+Roles (Admin / User)
+
+Guardias
+
+Protección de endpoints
+
+Registro, Login, Check-Status
+
+📦 Administrador de productos
+
+Módulo CRUD profesional:
+
+Crear productos
+
+Editar
+
+Actualizar imágenes
+
+Filtrar por categoría o género
+
+Tags dinámicos
+
+Stock, tallas, precios…
+
+🖼️ Gestión de imágenes desde el backend
+
+El backend sirve imágenes estáticas desde:
+
+static/products
+
+
+¡Listo para servir imágenes de forma eficiente en producción!
+
+ Backend NestJS desplegado en Cloud Run
+
+El backend funciona en contenedores Docker, desplegado en Google Cloud:
+
+Cloud Run (serverless containers)
+
+Artifact Registry
+
+PostgreSQL en producción
+
+SSL, CORS, env vars
+
+CI/CD manual y auto-deploy
+
+⚙️ Frontend Angular optimizado
+
+Compilado y deployado en hosting estático (Netlify), con:
+
+Lazy Loading
+
+Modularización por features
+
+Custom Pipes
+
+Responsive UI
+
+Buen rendimiento en Lighthouse
+
+🧱 Tecnologías principales
+Frontend
+
+Angular 19
+
+Angular Signals
+
+TailwindCSS
+
+DaisyUI
+
+TypeScript
+
+RxJS
+
+Router + Standalone Components
+
+Backend
+
+NestJS
+
+TypeORM
+
+PostgreSQL
+
+JWT + Guards
+
+Static Files
+
+Docker
+
+Cloud Run / Google Cloud
+
+¿Para qué sirve este proyecto?
+
+Este proyecto está diseñado como una base sólida para cualquier tienda online profesional, no solo para productos Tesla.
+Puedes adaptarlo rápidamente a:
+
+Ropa
+
+Electrónica
+
+Servicios
+
+Productos digitales
+
+Tiendas pequeñas o medianas
+
+El código es modular, escalable y preparado para integrar pagos, dashboards y analíticas.
+
+Arranque local
+Frontend
+cd frontend
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+http://localhost:4200
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Backend
+cd backend
+yarn start:dev
 
-```bash
-ng generate component component-name
-```
+📦 Build producción
+ng build --configuration production
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+🛠️ Estructura del proyecto (simplificada)
+frontend/
+  src/
+    app/
+      products/
+      shared/
+      cart/
+      auth/
+      core/
+    assets/
+backend/
+  src/
+    products/
+    files/
+    auth/
+    common/
+    static/
+      products/
+Dockerfile
 
-```bash
-ng generate --help
-```
+ Autor
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Sime (SimeDev)
+Desarrollador Web Full-Stack
